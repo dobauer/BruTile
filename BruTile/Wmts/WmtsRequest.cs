@@ -16,6 +16,7 @@ namespace BruTile.Wmts
         public const string ZTag = "{TileMatrix}";
         public const string TileMatrixSetTag = "{TileMatrixSet}";
         public const string StyleTag = "{Style}";
+        public const string DimensionTimeTag = "{TIME}";
 
         private readonly List<ResourceUrl> _resourceUrls;
         private int _resourceUrlCounter;

@@ -168,6 +168,8 @@ namespace BruTile.Wmts
             {
                 var template = resourceUrl.template.Replace(WmtsRequest.TileMatrixSetTag, tileMatrixSet);
                 template = template.Replace(WmtsRequest.StyleTag, style);
+                template = template.Replace(WmtsRequest.DimensionTimeTag, "9999");
+
                 resourceUrls.Add(new ResourceUrl
                     {
                         Format = resourceUrl.format,
