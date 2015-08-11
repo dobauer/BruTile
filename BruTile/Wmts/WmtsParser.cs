@@ -80,7 +80,10 @@ namespace BruTile.Wmts
                                 wmtsRequest = new WmtsRequest(CreateResourceUrlsFromResourceUrlNode(
                                     layer.ResourceURL,
                                     style.Identifier.Value,
-                                    tileMatrixLink.TileMatrixSet));
+                                    tileMatrixLink.TileMatrixSet,
+                                    layer.Dimension));
+
+                                //todo add the Dimension values to the Request
                             }
 
                             var tileMatrixSet = tileMatrixLink.TileMatrixSet;
@@ -161,14 +164,25 @@ namespace BruTile.Wmts
         }
 
         private static IEnumerable<ResourceUrl> CreateResourceUrlsFromResourceUrlNode(IEnumerable<URLTemplateType> inputResourceUrls,
-            string style, string tileMatrixSet)
+            string style, string tileMatrixSet, Dimension[] dimensions)
         {
             var resourceUrls = new List<ResourceUrl>();
             foreach (var resourceUrl in inputResourceUrls)
             {
                 var template = resourceUrl.template.Replace(WmtsRequest.TileMatrixSetTag, tileMatrixSet);
                 template = template.Replace(WmtsRequest.StyleTag, style);
-                template = template.Replace(WmtsRequest.DimensionTimeTag, "9999");
+
+
+                if (dimensions != null)
+                {
+                    foreach (Dimension dimension in dimensions)
+                    {
+                        string dimValue = string.IsNullOrWhiteSpace(dimension.Default) ? dimension.Value[0] : dimension.Default;
+                        string dimKey = String.Format("{{{0}}}", dimension.Identifier.Value);
+                        //todo dimValue as optional parameter passed on from the caller
+                        template = template.Replace(dimKey, dimValue);
+                    }
+                }
 
                 resourceUrls.Add(new ResourceUrl
                     {
