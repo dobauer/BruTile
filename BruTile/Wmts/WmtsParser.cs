@@ -321,6 +321,7 @@ namespace BruTile.Wmts
                 unitsPerPixel = ss[tileMatrix.ScaleDenominator].GetValueOrDefault(0d);
             }
 
+            // the top left point can be provided as (x, y) or (y, x) to take care of this problem ordinateOrder is used
             return new KeyValuePair<string, Resolution>(tileMatrix.Identifier.Value,
                 new Resolution
                 (
@@ -328,9 +329,9 @@ namespace BruTile.Wmts
                     unitsPerPixel,
                     tileMatrix.TileWidth,
                     tileMatrix.TileHeight,
-                    Convert.ToDouble(coords[ordinateOrder[0]], 
-                    CultureInfo.InvariantCulture), 
-                    Convert.ToDouble(coords[ordinateOrder[1]], 
+                    Convert.ToDouble(coords[ordinateOrder[1]],  //the top coordinate of the top left corner this is the y coordinate of a point which is usually given in the form (x, y)
+                    CultureInfo.InvariantCulture),
+                    Convert.ToDouble(coords[ordinateOrder[0]], //the left coordinate of the top left corner this is the x coordinate of a point which is  usually given in the form (x, y)
                     CultureInfo.InvariantCulture),
                     tileMatrix.MatrixWidth,
                     tileMatrix.MatrixHeight,
